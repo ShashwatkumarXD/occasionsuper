@@ -1,3 +1,4 @@
+import { Routes } from "react-router-dom"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home"
 import VendorReg from "./pages/Registration/VendorReg";

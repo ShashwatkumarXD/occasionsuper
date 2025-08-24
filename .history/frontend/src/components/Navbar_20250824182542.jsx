@@ -14,11 +14,11 @@ function Navbar() {
 
                     {/* Navigation Items on right */}
                     <div className="w-4/5 flex items-center justify-around">
-                        <Link to="/" className="text-gray-800 font-medium text-2xl no-underline hover:text-purple-600 active:text-purple-600">Home</Link>
+                        <Link to="/vendorReg" className="text-gray-800 font-medium text-2xl no-underline hover:text-purple-600 active:text-purple-600">Home</Link>
                         <Link to="#" className="text-gray-800 font-medium text-2xl no-underline hover:text-purple-600 active:text-purple-600">About Us</Link>
                         <Link to="#" className="text-gray-800 font-medium text-2xl no-underline hover:text-purple-600 active:text-purple-600">Services</Link>
                         <Link to="#" className="text-gray-800 font-medium text-2xl no-underline hover:text-purple-600 active:text-purple-600">Contact Us</Link>
-                        <Link to="/vendorReg" className="text-gray-800 font-medium text-2xl no-underline hover:text-purple-600 active:text-purple-600">Vendor Registration</Link>
+                        <Link to="#" className="text-gray-800 font-medium text-2xl no-underline hover:text-purple-600 active:text-purple-600">Vendor Registration</Link>
                     </div>
                 </div>
 
