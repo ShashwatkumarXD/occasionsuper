@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --color-orange-gradient: linear-gradient(to right, #ea580c, #ef4444, #f43f5e);
+}
+
+/* Create a utility class */
+.bg-global-gradient {
+  background-image: var(--color-orange-gradient);
+}
