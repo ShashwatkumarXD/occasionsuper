@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .hover-global {
+    @apply hover:text-[#E69B83] hover:scale-110 transition-all ease-linear;
+  }
+}
