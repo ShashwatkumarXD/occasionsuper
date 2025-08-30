@@ -1,0 +1,15 @@
+import React from 'react'
+import Navbar from '../components/Navbar'
+import Services from '../components/Services'
+
+function Home() {
+  return (
+    <div>
+      <Navbar/>
+      <Services/>
+      <Footer/>
+    </div>
+  )
+}
+
+export default Home

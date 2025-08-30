@@ -1,0 +1,81 @@
+import React from 'react'
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
+
+const ContactForm = () => {
+  return (
+    <section className="w-[95%]  mt-8 mx-auto p-2 relative overflow-hidden">
+      <div className="m-[5px] relative z-10">
+        {/* Header Section */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-global-gradient mb-2">
+            Get in touch
+          </h1>
+          <p className="text-2xl text-gray-500 leading-relaxed">
+            Reach out, and let's create a universe of possibilities together!
+          </p>
+        </div>
+        <div className="mb-8">
+          <h2 className="text-3xl font-bold text-global-gradient mb-2">
+            Customer Enquiry
+          </h2>
+          <p className="text-xl text-gray-500 leading-relaxed">
+            Let's align our constellations! Reach out and let the magic of collaboration illuminate our skies.
+          </p>
+        </div>
+        <form className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <input
+                type="text"
+                placeholder="First Name"
+                required
+                className="w-full p-3 outline-1 outline-gray-400 rounded-lg focus:outline-2 focus:outline-orange-500"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                required
+                placeholder="Last Name"
+                className="w-full p-3 outline-1 outline-gray-400 rounded-lg focus:outline-2 focus:outline-orange-500"
+              />
+            </div>
+          </div>
+          <div>
+            <input
+              type="email"
+              required
+              placeholder="Email"
+              className="w-full p-3 outline-1 outline-gray-400 rounded-lg focus:outline-2 focus:outline-orange-500"
+            />
+          </div>
+          <div>
+            <input
+              type="tel"
+              required
+              placeholder="Phone Number"
+              className="w-full p-3 outline-1 outline-gray-400 rounded-lg focus:outline-2 focus:outline-orange-500"
+            />
+          </div>
+          <div>
+            <textarea
+              required
+              placeholder="Message"
+              rows="3"
+              className="w-full p-3 outline-1 outline-gray-400 rounded-lg focus:outline-2 focus:outline-orange-500"
+            ></textarea>
+          </div>
+          <button
+            type="submit"
+            className="group w-full bg-global-gradient text-white font-semibold p-4 rounded-xl flex items-center justify-center space-x-1  hover:cursor-pointer hover:shadow-md hover:shadow-orange-700 transition-all duration-300 ease-in-out"
+          >
+            <span className="text-xl">Submit</span>
+            <PaperAirplaneIcon className="h-5 w-5 mt-0.5" />
+          </button>
+        </form>
+      </div>
+    </section>
+  )
+}
+
+export default ContactForm

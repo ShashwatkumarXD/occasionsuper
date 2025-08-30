@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-orange-gradient: linear-gradient(to right, #ea580c, #ef4444, #f43f5e);
+}
+
+/* Create a utility class */
+.bg-global-gradient {
+  background-image: var(--color-orange-gradient);
+}
+
+@theme {
+  --color-global-text-gradient: linear-gradient(to right, #ea580c, #ef4444, #f43f5e);
+}
+
+/* Create a reusable utility class */
+.text-global-gradient {
+  background-image: var(--color-global-text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}

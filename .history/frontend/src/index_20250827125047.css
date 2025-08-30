@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@layer utilities {
+    .hover-global {
+        @apply hover:text-[#E69B83] hover:scale-110 transition-all duration-300 ease-linear;
+    }
+    .hover-global:hover {
+    text-shadow: 0px 2px 6px rgba(230, 155, 131, 0.8);
+  }
+}
