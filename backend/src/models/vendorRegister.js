@@ -3,20 +3,13 @@ const mongoose = require("mongoose");
 const VendorRegister = new mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId,
-        default: mongoose.Types.ObjectId,
+        default: () => new mongoose.Types.ObjectId(),
     },
 
     userId: {
         type: Number,
         unique: true,
-        default: async function(){
-            try {
-                const lastUser = await this.model("VendorRegister").findOne({}, {}, { sort: { userId: -1 } });
-                return lastUser ? lastUser.userId + 1 : 1;
-            } catch (error) {
-                throw new Error("Failed to generate userId");
-            }
-        }
+        default: 1
     },
 
     businessName: {
@@ -58,23 +51,69 @@ const VendorRegister = new mongoose.Schema({
         required: true
     },
     
+    socialMedia: {
+        type: String,
+        required: false,
+        default: null
+    },
+    
     categories: {
         type: [String],
         required: true
     },
-    packages: {
+    
+    images: {
         type: [String],
         required: false,
+        default: null
+    },
+    
+    videos: {
+        type: [String],
+        required: false,
+        default: null
+    },
+    
+    packages: {
+        type: [Object],
+        required: false,
+        default: []
     },
     
     documents: {
-        type: Object,
-        required: false,
+        gst: {
+            type: [String],
+            required: false,
+            default: null
+        },
+        businessProof: {
+            type: [String],
+            required: false,
+            default: null
+        },
+        idProof: {
+            type: [String],
+            required: false,
+            default: null
+        }
     },
 
     bankDetails: {
-        type: Object,
-        required: false,
+        accountHolder: {
+            type: String,
+            required: false,
+            default: null
+        },
+        accountNumber: {
+            type: String,
+            required: false,
+            default: null
+        },
+        ifsc: {
+            type: String,
+            required: false,
+            default: null
+        }
     },
 
     status: {
@@ -105,6 +144,20 @@ const VendorRegister = new mongoose.Schema({
 }, { timestamps: true,
     toJSON: {virtuals: true},
     toObject: {virtuals: true}
+});
+
+// Pre-save middleware to generate userId
+VendorRegister.pre('save', async function(next) {
+    if (this.isNew) {
+        try {
+            const lastUser = await this.constructor.findOne({}, {}, { sort: { userId: -1 } });
+            this.userId = lastUser ? lastUser.userId + 1 : 1;
+        } catch (error) {
+            console.error('Error generating userId:', error);
+            this.userId = 1; // Fallback
+        }
+    }
+    next();
 });
 
 // VendorRegister.index({email: 1}, {unique: true});

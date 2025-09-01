@@ -4,8 +4,11 @@ const logger = require("../utils/logger");
 
 const vendorRegisterForm = async (req, res, next) => {
     try {
+        console.log("Received vendor registration request:", req.body);
+        
         // ✅ Use validated and sanitized data from middleware
         const vendorData = req.validatedData;
+        console.log("Validated data:", vendorData);
         
         // ✅ Check if vendor already exists (Business Logic)
         const existingVendor = await vendorRegisterModel.findOne({ 
@@ -20,14 +23,30 @@ const vendorRegisterForm = async (req, res, next) => {
         }
 
         // ✅ Create new vendor with additional business data
-        const vendor = new vendorRegisterModel({
+        const vendorDataToSave = {
             ...vendorData,
-            documents: vendorData.documents || {},
-            bankDetails: vendorData.bankDetails || {},
+            documents: vendorData.documents || {
+                gst: null,
+                businessProof: null,
+                idProof: null
+            },
+            bankDetails: vendorData.bankDetails || {
+                accountHolder: null,
+                accountNumber: null,
+                ifsc: null
+            },
+            images: vendorData.images || null,
+            videos: vendorData.videos || null,
+            packages: vendorData.packages || [],
             status: "pending"
-        });
+        };
+        
+        console.log("Data to save:", vendorDataToSave);
+        
+        const vendor = new vendorRegisterModel(vendorDataToSave);
         
         await vendor.save();
+        console.log("Vendor saved successfully:", vendor.userId);
 
         // ✅ Log successful registration
         logger.info(`Vendor registered successfully: ${vendor.userId}`, {
@@ -49,6 +68,8 @@ const vendorRegisterForm = async (req, res, next) => {
         });
 
     } catch (error) {
+        console.error("Vendor registration error:", error);
+        
         // ✅ Log error for debugging
         logger.error("Vendor registration failed", {
             error: error.message,
@@ -83,7 +104,8 @@ const vendorRegisterForm = async (req, res, next) => {
         // ✅ Generic error response
         res.status(500).json({
             success: false,
-            message: "Internal Server Error"
+            message: "Internal Server Error",
+            error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong'
         });
     }
 };

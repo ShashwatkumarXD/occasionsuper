@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import FileUpload from "./FileUpload";
 
-const VendorStep1 = ({ formData, handleChange, handleCategorySelect }) => {
+const VendorStep1 = ({ formData, handleChange, handleCategorySelect, setFormData }) => {
     const categories = [
         { id: 1, name: "Wedding Services", icon: Building2 },
         { id: 2, name: "Catering", icon: UtensilsCrossed },
@@ -133,10 +133,9 @@ const VendorStep1 = ({ formData, handleChange, handleCategorySelect }) => {
                 {/* Social Media Link */}
                 <div className="flex flex-col md:col-span-2">
                     <label htmlFor="socialMedia" className="text-xl mb-1 font-medium text-gray-700">
-                        Social Media Link
+                        Social Media Link <span className="text-blue-500 text-sm">(Optional)</span>
                     </label>
                     <input
-                        required
                         type="url"
                         id="socialMedia"
                         name="socialMedia"
@@ -149,15 +148,16 @@ const VendorStep1 = ({ formData, handleChange, handleCategorySelect }) => {
 
                 <FileUpload
                     label="Upload Images"
-                    description="You can upload multiple images."
+                    description="You can upload multiple images (optional)."
                     onFileSelect={(files) => setFormData((prev) => ({ ...prev, images: files }))}
+                    required={false}
                 />
 
                 <FileUpload
-                required
                     label="Upload Videos"
-                    description="You can upload multiple videos."
+                    description="You can upload multiple videos (optional)."
                     onFileSelect={(files) => setFormData((prev) => ({ ...prev, videos: files }))}
+                    required={false}
                 />
             </div>
 

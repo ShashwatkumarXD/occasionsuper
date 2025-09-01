@@ -45,24 +45,16 @@ const Register = () => {
             );
         }
         if (currentStep === 2) {
-            return formData.packages.length > 0 &&
-                formData.packages.every(
-                    (pkg) => pkg.title && pkg.price > 0 && pkg.description
-                );
+            // Packages are now optional - allow null values
+            return true;
         }
         if (currentStep === 3) {
-            return (
-                formData.documents.gst &&
-                formData.documents.businessProof &&
-                formData.documents.idProof
-            );
+            // Documents are now optional - allow null values
+            return true;
         }
         if (currentStep === 4) {
-            return (
-                formData.bankDetails.accountHolder &&
-                formData.bankDetails.accountNumber &&
-                formData.bankDetails.ifsc
-            );
+            // Bank details are now optional - allow null values
+            return true;
         }
         return false;
     };
@@ -84,26 +76,6 @@ const Register = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // const handleSubmit = async () => {
-    //     if (!formData.businessName || !formData.ownerName || !formData.email ||
-    //         !formData.phone || !formData.city || !formData.serviceArea ||
-    //         !formData.categories.length || !formData.bankDetails.accountNumber) {
-    //         alert("Please fill in all required fields ❌");
-    //         return;
-    //     }
-
-    //     try {
-    //         const response = await axios.post("http://localhost:5000/api/vendors", formData, {
-    //             headers: { "Content-Type": "application/json" },
-    //         });
-    //         console.log("Vendor Registered:", response.data);
-    //         alert("Application Submitted Successfully ✅");
-    //     } catch (error) {
-    //         console.error("Error submitting form:", error);
-    //         alert("Failed to submit application ❌");
-    //     }
-    // };
-
     const handleSubmit = async () => {
         if (
             !formData.businessName ||
@@ -112,27 +84,59 @@ const Register = () => {
             !formData.phone ||
             !formData.city ||
             !formData.serviceArea ||
-            !formData.categories.length ||
-            !formData.bankDetails.accountNumber
+            !formData.categories.length
         ) {
             alert("Please fill in all required fields ❌");
             return;
         }
 
         try {
-            // ✅ Save form data in localStorage so you can see it in Chrome > Application > Local Storage
-            localStorage.setItem("vendorFormData", JSON.stringify(formData));
+            // Prepare payload aligned with backend validation
+            const sanitizedPackages = Array.isArray(formData.packages)
+                ? formData.packages
+                    .filter((pkg) => pkg && (pkg.title || pkg.price || pkg.description))
+                    .map((pkg) => ({
+                        title: (pkg.title || "").trim(),
+                        price: String(pkg.price ?? "").trim(),
+                        description: (pkg.description || "").trim(),
+                        inclusions: pkg.inclusions || "",
+                    }))
+                    .filter((pkg) => pkg.title && pkg.price && pkg.description)
+                : [];
 
-            // ✅ Send to backend as well
-            const response = await axios.post("http://localhost:3000/api/register/vendor/register", formData, {
-                headers: { "Content-Type": "application/json" },
-            });
+            const payload = {
+                ...formData,
+                phone: String(formData.phone).replace(/\D/g, ""),
+                categories: (formData.categories || []).map((c) => String(c).trim()),
+                packages: sanitizedPackages,
+                // Defer file uploads; send nulls to satisfy schema until upload flow is implemented
+                images: null,
+                videos: null,
+                documents: null,
+                socialMedia: formData.socialMedia || null,
+            };
+
+            localStorage.setItem("vendorFormData", JSON.stringify(payload));
+
+            const response = await axios.post(
+                "http://localhost:3000/api/register/vendor/register",
+                payload,
+                { headers: { "Content-Type": "application/json" } }
+            );
 
             console.log("Vendor Registered:", response.data);
-            alert("Application Submitted Successfully ✅");
+            alert("Application Submitted Successfully ✅"); 
         } catch (error) {
             console.error("Error submitting form:", error);
-            alert("Failed to submit application ❌");
+            const serverMsg = error?.response?.data?.message;
+            const serverErrors = error?.response?.data?.errors;
+            if (serverErrors && Array.isArray(serverErrors)) {
+                alert(`Validation failed:\n- ${serverErrors.join("\n- ")}`);
+            } else if (serverMsg) {
+                alert(serverMsg);
+            } else {
+                alert("Failed to submit application ❌");
+            }
         }
     };
 
@@ -159,6 +163,7 @@ const Register = () => {
                     formData={formData}
                     handleChange={handleChange}
                     handleCategorySelect={handleCategorySelect}
+                    setFormData={setFormData}
                 />
             )}
 

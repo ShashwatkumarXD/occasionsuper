@@ -32,16 +32,15 @@ const VendorStep4 = ({ formData, setFormData }) => {
       <div className="bg-white rounded-xl mb-8" >
         <h3 className="text-2xl font-semibold text-center">Bank Details</h3>
         <p className="text-gray-600 text-center mb-6">
-          Add your bank details for secure payouts
+          Add your bank details for secure payouts (optional)
         </p>
 
         <div className="space-y-2">
           <div>
             <label className="block text-lg font-semibold mb-1">
-              Account Holder Name
+              Account Holder Name <span className="text-blue-500 text-sm">(Optional)</span>
             </label>
             <input
-              required
               type="text"
               name="accountHolder"
               value={bankDetails.accountHolder}
@@ -52,9 +51,10 @@ const VendorStep4 = ({ formData, setFormData }) => {
           </div>
 
           <div>
-            <label className="block text-lg font-semibold mb-1">Account Number</label>
+            <label className="block text-lg font-semibold mb-1">
+              Account Number <span className="text-blue-500 text-sm">(Optional)</span>
+            </label>
             <input
-              required
               type="text"
               name="accountNumber"
               value={bankDetails.accountNumber}
@@ -68,9 +68,10 @@ const VendorStep4 = ({ formData, setFormData }) => {
           </div>
 
           <div>
-            <label className="block text-lg font-semibold mb-1">IFSC Code</label>
+            <label className="block text-lg font-semibold mb-1">
+              IFSC Code <span className="text-blue-500 text-sm">(Optional)</span>
+            </label>
             <input
-              required
               type="text"
               name="ifsc"
               value={bankDetails.ifsc}
@@ -105,6 +106,10 @@ const VendorStep4 = ({ formData, setFormData }) => {
             <CircleCheck className="w-4 h-4 text-green-500" />
             Compliant with banking security standards
           </li>
+          <li className="flex items-center gap-2">
+            <CircleCheck className="w-4 h-4 text-green-500" />
+            Bank details are optional - you can add them later
+          </li>
         </ul>
       </div >
 
@@ -124,7 +129,7 @@ const VendorStep4 = ({ formData, setFormData }) => {
           </li>
           <li>
             <strong>Bank Details:</strong>
-            {formData.bankDetails.accountNumber ? "Added" : "Pending"}
+            {formData.bankDetails.accountNumber ? "Added" : "Optional"}
           </li>
         </ul>
       </div >

@@ -17,7 +17,7 @@ const VendorStep3 = ({ formData, setFormData }) => {
     <div className="max-w-3xl mx-auto">
       <h2 className="text-2xl text-center font-bold">Document Upload</h2>
       <p className="text-center text-gray-600 mb-4">
-        Upload required documents for verification
+        Upload required documents for verification (all documents are optional)
       </p>
 
       {/* GST Upload */}
@@ -25,12 +25,14 @@ const VendorStep3 = ({ formData, setFormData }) => {
         label="GST Certificate"
         description="Required for tax compliance"
         onFileSelect={handleGSTUpload}
+        required={false}
       />
 
       <FileUpload
         label="Business Registration"
         description="Shop license or business registration"
         onFileSelect={handleBussinessUpload}
+        required={false}
       />
 
 
@@ -39,6 +41,7 @@ const VendorStep3 = ({ formData, setFormData }) => {
         label="ID Proof"
         description="Aadhaar, PAN, or Passport"
         onFileSelect={handleIDUpload}
+        required={false}
       />
 
       {/* Security Note */}
@@ -59,6 +62,10 @@ const VendorStep3 = ({ formData, setFormData }) => {
           <li className="flex items-center gap-2">
             <CircleCheck className="w-4 h-4 text-green-500" />
             Deleted after verification is complete
+          </li>
+          <li className="flex items-center gap-2">
+            <CircleCheck className="w-4 h-4 text-green-500" />
+            Documents are optional - you can upload them later
           </li>
         </ul>
       </div>
