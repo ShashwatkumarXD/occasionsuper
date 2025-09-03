@@ -1,0 +1,34 @@
+import React from 'react'
+
+function Navbar() {
+    return (
+        
+        <nav className="bg-white border-b border-gray-300">
+            <h1 className="text-5xl text-red-500 bg-yellow-200 p-10">
+  Tailwind Test
+</h1>
+
+            <div className="max-w-7xl mx-auto px-6">
+                <div className="flex items-center h-16 justify-between px-8">
+                    {/* Logo on left */}
+                    <div className="flex-shrink-0">
+                        <h1 className="text-xl ml-12 font-bold text-black">logo</h1>
+                    </div>
+
+                    {/* Navigation Items on right */}
+                    <div className="w-3/5 border-2 flex items-center justify-around">
+                        <a href="#" className="bg-yellow-200 text-purple-600 font-medium text-xl no-underline ">Home</a>
+                        <a href="#" className="text-gray-800 font-medium text-xl no-underline">About Us</a>
+                        <a href="#" className="text-gray-800 font-medium text-xl no-underline">Services</a>
+                        <a href="#" className="text-gray-800 font-medium text-xl no-underline">Contact Us</a>
+                        <a href="#" className="text-gray-800 font-medium text-xl no-underline">About Us</a>
+                        <a href="#" className="text-gray-800 font-medium text-xl no-underline">Vendor Registration</a>
+                    </div>
+                </div>
+
+            </div>
+        </nav>
+    )
+}
+
+export default Navbar
