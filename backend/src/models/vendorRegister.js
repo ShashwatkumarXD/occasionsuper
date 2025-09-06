@@ -26,8 +26,8 @@ const VendorRegister = new mongoose.Schema({
         required: [true, 'Email is required'],
         unique: true,
         match: [
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-            'Please enter a valid email address'
+            /@gmail\.com$/,
+            'Email must contain @gmail.com'
         ],
         lowercase: true,
         trim: true
@@ -36,7 +36,7 @@ const VendorRegister = new mongoose.Schema({
         type: String,
         required: [true, 'Phone number is required'],
         trim: true,
-        match: [/^[0-9]{7,15}$/, 'Please enter a valid phone number'],
+        match: [/^[0-9]{10}$/, 'Invalid mobile number. Please enter exactly 10 digits.'],
         set: function(phone) {
             return phone.replace(/\s+/g, ''); // Remove spaces
         }
@@ -62,6 +62,11 @@ const VendorRegister = new mongoose.Schema({
         type: [String],
         required: true
     },
+    othersCategories: {
+               type: [String],
+               required: false,
+               default: []
+           },
     
     images: {
         type: [String],

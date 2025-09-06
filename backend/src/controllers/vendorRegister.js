@@ -5,16 +5,18 @@ const logger = require("../utils/logger");
 const vendorRegisterForm = async (req, res, next) => {
     try {
         console.log("Received vendor registration request:", req.body);
-        
+        console.log("Received files:", req.files);
+
+
         // ✅ Use validated and sanitized data from middleware
         const vendorData = req.validatedData;
         console.log("Validated data:", vendorData);
-        
+
         // ✅ Check if vendor already exists (Business Logic)
-        const existingVendor = await vendorRegisterModel.findOne({ 
-            email: vendorData.email 
+        const existingVendor = await vendorRegisterModel.findOne({
+            email: vendorData.email
         });
-        
+
         if (existingVendor) {
             return res.status(409).json({
                 success: false,
@@ -25,26 +27,33 @@ const vendorRegisterForm = async (req, res, next) => {
         // ✅ Create new vendor with additional business data
         const vendorDataToSave = {
             ...vendorData,
-            documents: vendorData.documents || {
+            // documents: vendorData.documents || {
+            //     gst: null,
+            //     businessProof: null,
+            //     idProof: null
+            // },
+
+            documents: (vendorData.documents !== undefined) ? vendorData.documents : {
                 gst: null,
                 businessProof: null,
                 idProof: null
             },
+
             bankDetails: vendorData.bankDetails || {
                 accountHolder: null,
                 accountNumber: null,
                 ifsc: null
             },
-            images: vendorData.images || null,
-            videos: vendorData.videos || null,
+            images: Array.isArray(vendorData.images) ? vendorData.images : [],
+            videos: Array.isArray(vendorData.videos) ? vendorData.videos : [],
             packages: vendorData.packages || [],
             status: "pending"
         };
-        
+
         console.log("Data to save:", vendorDataToSave);
-        
+
         const vendor = new vendorRegisterModel(vendorDataToSave);
-        
+
         await vendor.save();
         console.log("Vendor saved successfully:", vendor.userId);
 
@@ -69,14 +78,14 @@ const vendorRegisterForm = async (req, res, next) => {
 
     } catch (error) {
         console.error("Vendor registration error:", error);
-        
+
         // ✅ Log error for debugging
         logger.error("Vendor registration failed", {
             error: error.message,
             stack: error.stack,
             vendorData: req.body
         });
-        
+
         // ✅ Handle specific error types
         if (error.name === "ValidationError") {
             return res.status(400).json({
@@ -85,14 +94,14 @@ const vendorRegisterForm = async (req, res, next) => {
                 errors: Object.values(error.errors).map(err => err.message)
             });
         }
-        
+
         if (error.code === 11000) {
             return res.status(409).json({
                 success: false,
                 message: "Duplicate entry found"
             });
         }
-        
+
         if (error.name === "MongooseError") {
             return res.status(400).json({
                 success: false,
@@ -100,7 +109,7 @@ const vendorRegisterForm = async (req, res, next) => {
                 error: error.message
             });
         }
-        
+
         // ✅ Generic error response
         res.status(500).json({
             success: false,
@@ -114,8 +123,11 @@ const getApprovedVendors = async (req, res) => {
     try {
         const vendors = await vendorRegisterModel
             .find({ status: "approved", isActive: true })
+            // .select(
+            //     "businessName ownerName email phone city serviceArea socialMedia categories images videos packages verificationStatus"
+            // )
             .select(
-                "businessName ownerName email phone city serviceArea socialMedia categories images videos packages verificationStatus"
+                "businessName ownerName email phone city serviceArea socialMedia categories images videos documents packages verificationStatus"
             )
             .sort({ createdAt: -1 });
 
